@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	//	"math"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 )
@@ -32,21 +30,22 @@ type Color struct {
 var palette []Color
 
 func InitPalette() {
-	palette = make([]Color, 512)
-	for i := 0; i < 256; i++ {
-		palette[i].Red = byte(i)
-		palette[i].Blue = 255 - byte(i)
+	palette = make([]Color, 256)
+	for i := 0; i < 128; i++ {
+		palette[i].Red = 2 * byte(i)
+		palette[i].Blue = 255 - 2*byte(i)
 	}
-	for i := 0; i < 256; i++ {
-		palette[i+256].Red = 255 - byte(i)
-		palette[i+256].Blue = byte(i)
+	for i := 0; i < 128; i++ {
+		palette[i+128].Red = 255 - 2*byte(i)
+		palette[i+128].Blue = 2 * byte(i)
 	}
 }
 
 func update(screen *ebiten.Image) error {
-	if ebiten.IsDrawingSkipped() {
-		return nil
-	}
+	
+	//	if ebiten.IsDrawingSkipped() {
+	//		return nil
+	//	}
 
 	screen.DrawImage(offscreen, nil)
 	x, y := ebiten.CursorPosition()
@@ -71,7 +70,6 @@ func update(screen *ebiten.Image) error {
 	} else {
 		rightButton = false
 	}
-	//ebitenutil.DebugPrint(screen, fmt.Sprintf("%d,%d", x, y))
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("%f,%f,%f,%f", m.centerX, m.centerY, m.size, 0.05/m.size))
 	return nil
 }
@@ -100,7 +98,7 @@ func (m *Mandel) Set(centerX, centerY, size float64) {
 }
 
 func (m *Mandel) DrawMandel() {
-	maxIter := 512
+	maxIter := 256
 	for j := 0; j < screenHeight; j++ {
 		for i := 0; i < screenHeight; i++ {
 			x := float64(i)*m.size/screenWidth - m.size/2 + m.centerX
@@ -128,15 +126,11 @@ func (m *Mandel) DrawMandel() {
 func init() {
 	offscreen, _ = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
 	offscreenPix = make([]byte, screenWidth*screenHeight*4)
-	//	for i := range palette {
-	//		palette[i] = byte(math.Sqrt(float64(i)/float64(len(palette))) * 0x80)
-	//	}
 	InitPalette()
 	leftButton, rightButton = false, false
 }
 
 func init() {
-	// Now it is not feasible to call updateOffscreen every frame due to performance.
 	m = new(Mandel)
 	m.Set(0.0, 1.0, 0.5)
 	m.DrawMandel()
