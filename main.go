@@ -193,7 +193,6 @@ func (m *Mandel) InitPalette() {
 	ind := 0
 	for i := float32(0); i < 1; i += step {
 		c := GetColor(i)
-		fmt.Println(c)
 		m.palette[ind] = c
 		ind++
 	}
