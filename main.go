@@ -18,7 +18,7 @@ import (
 const (
 	screenWidth  = 480
 	screenHeight = 480
-	maxCol       = 2048
+	maxCol       = 512
 
 //	log_escape   = 0.6931471805599453
 )
@@ -250,7 +250,7 @@ func (m *Mandel) Set(centerX, centerY, size float64) {
 func (m *Mandel) DrawMandel() {
 	start := time.Now()
 	var wg sync.WaitGroup
-	maxIter := 2048
+	maxIter := 512
 	for j := 0; j < screenHeight; j++ {
 		wg.Add(1)
 		go func(j int) {
