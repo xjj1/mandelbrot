@@ -261,7 +261,7 @@ func (m *Mandel) DrawMandel() {
 				it := 0
 				for ; it < maxIter; it++ {
 					z = z*z + c
-					if real(z)*real(z)+imag(z)*imag(z) > 2 {
+					if real(z)*real(z)+imag(z)*imag(z) > 200000 {
 						break
 					}
 				}
